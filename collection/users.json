@@ -1,0 +1,517 @@
+{
+	"info": {
+		"_postman_id": "24358bf5-007c-4ca9-8f8d-0b83e574eb24",
+		"name": "users",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "27878992",
+		"_collection_link": "https://grey-desert-318268.postman.co/workspace/My-Workspace~a9b566e4-b7ff-43dd-8b59-fee0a53a5f5e/collection/27878992-24358bf5-007c-4ca9-8f8d-0b83e574eb24?action=share&source=collection_link&creator=27878992"
+	},
+	"item": [
+		{
+			"name": "/users",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://127.0.0.1:5000/books",
+					"protocol": "http",
+					"host": [
+						"127",
+						"0",
+						"0",
+						"1"
+					],
+					"port": "5000",
+					"path": [
+						"books"
+					]
+				}
+			},
+			"response": [
+				{
+					"name": "/users",
+					"originalRequest": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://127.0.0.1:5000/users",
+							"protocol": "http",
+							"host": [
+								"127",
+								"0",
+								"0",
+								"1"
+							],
+							"port": "5000",
+							"path": [
+								"users"
+							]
+						}
+					},
+					"status": "OK",
+					"code": 200,
+					"_postman_previewlanguage": "json",
+					"header": [
+						{
+							"key": "Server",
+							"value": "Werkzeug/3.0.4 Python/3.12.4"
+						},
+						{
+							"key": "Date",
+							"value": "Fri, 04 Oct 2024 17:27:19 GMT"
+						},
+						{
+							"key": "Content-Type",
+							"value": "application/json"
+						},
+						{
+							"key": "Content-Length",
+							"value": "291"
+						},
+						{
+							"key": "Connection",
+							"value": "close"
+						}
+					],
+					"cookie": [],
+					"body": "{\n    \"1\": {\n        \"fullname\": \"fanes setiawan\",\n        \"password\": \"admin123\",\n        \"status\": \"mahasiswa\",\n        \"user_id\": 1,\n        \"username\": \"fanes123\"\n    },\n    \"2\": {\n        \"fullname\": \"adminadmin\",\n        \"password\": \"321admin\",\n        \"status\": \"admin\",\n        \"user_id\": 2,\n        \"username\": \"admin321\"\n    }\n}"
+				}
+			]
+		},
+		{
+			"name": "/user/id",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://127.0.0.1:5000/books/1",
+					"protocol": "http",
+					"host": [
+						"127",
+						"0",
+						"0",
+						"1"
+					],
+					"port": "5000",
+					"path": [
+						"books",
+						"1"
+					]
+				}
+			},
+			"response": [
+				{
+					"name": "/user/id",
+					"originalRequest": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://127.0.0.1:5000/users/1",
+							"protocol": "http",
+							"host": [
+								"127",
+								"0",
+								"0",
+								"1"
+							],
+							"port": "5000",
+							"path": [
+								"users",
+								"1"
+							]
+						}
+					},
+					"status": "OK",
+					"code": 200,
+					"_postman_previewlanguage": "json",
+					"header": [
+						{
+							"key": "Server",
+							"value": "Werkzeug/3.0.4 Python/3.12.4"
+						},
+						{
+							"key": "Date",
+							"value": "Fri, 04 Oct 2024 17:27:56 GMT"
+						},
+						{
+							"key": "Content-Type",
+							"value": "application/json"
+						},
+						{
+							"key": "Content-Length",
+							"value": "128"
+						},
+						{
+							"key": "Connection",
+							"value": "close"
+						}
+					],
+					"cookie": [],
+					"body": "{\n    \"fullname\": \"fanes setiawan\",\n    \"password\": \"admin123\",\n    \"status\": \"mahasiswa\",\n    \"user_id\": 1,\n    \"username\": \"fanes123\"\n}"
+				}
+			]
+		},
+		{
+			"name": "{POST}/users",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"title\" : \"web basic\",\n    \"author\":\"a doe\" ,\n    \"year\" :2024\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://127.0.0.1:5000/books",
+					"protocol": "http",
+					"host": [
+						"127",
+						"0",
+						"0",
+						"1"
+					],
+					"port": "5000",
+					"path": [
+						"books"
+					]
+				}
+			},
+			"response": [
+				{
+					"name": "post/users",
+					"originalRequest": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"username\":\"token\" ,\n    \"password\" :\"321token\" ,\n    \"fullname\": \"tokentoken\",\n    \"status\":\"core\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://127.0.0.1:5000/users",
+							"protocol": "http",
+							"host": [
+								"127",
+								"0",
+								"0",
+								"1"
+							],
+							"port": "5000",
+							"path": [
+								"users"
+							]
+						}
+					},
+					"status": "CREATED",
+					"code": 201,
+					"_postman_previewlanguage": "json",
+					"header": [
+						{
+							"key": "Server",
+							"value": "Werkzeug/3.0.4 Python/3.12.4"
+						},
+						{
+							"key": "Date",
+							"value": "Fri, 04 Oct 2024 17:30:17 GMT"
+						},
+						{
+							"key": "Content-Type",
+							"value": "application/json"
+						},
+						{
+							"key": "Content-Length",
+							"value": "165"
+						},
+						{
+							"key": "Connection",
+							"value": "close"
+						}
+					],
+					"cookie": [],
+					"body": "{\n    \"message\": \"user added successfully!\",\n    \"user\": {\n        \"fullname\": \"tokentoken\",\n        \"password\": \"321token\",\n        \"status\": \"core\",\n        \"username\": \"token\"\n    }\n}"
+				}
+			]
+		},
+		{
+			"name": "{UPDATE}/users",
+			"request": {
+				"method": "PUT",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"title\" : \"Dart basic\",\n    \"author\":\"fanes doe\" ,\n    \"year\" :2025\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://127.0.0.1:5000/books/1",
+					"protocol": "http",
+					"host": [
+						"127",
+						"0",
+						"0",
+						"1"
+					],
+					"port": "5000",
+					"path": [
+						"books",
+						"1"
+					]
+				}
+			},
+			"response": [
+				{
+					"name": "update-users",
+					"originalRequest": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"username\":\"token\" ,\n    \"password\" :\"321token\" ,\n    \"fullname\": \"tokentoken\",\n    \"status\":\"core\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://127.0.0.1:5000/users/1",
+							"protocol": "http",
+							"host": [
+								"127",
+								"0",
+								"0",
+								"1"
+							],
+							"port": "5000",
+							"path": [
+								"users",
+								"1"
+							]
+						}
+					},
+					"status": "OK",
+					"code": 200,
+					"_postman_previewlanguage": "json",
+					"header": [
+						{
+							"key": "Server",
+							"value": "Werkzeug/3.0.4 Python/3.12.4"
+						},
+						{
+							"key": "Date",
+							"value": "Fri, 04 Oct 2024 17:31:40 GMT"
+						},
+						{
+							"key": "Content-Type",
+							"value": "application/json"
+						},
+						{
+							"key": "Content-Length",
+							"value": "179"
+						},
+						{
+							"key": "Connection",
+							"value": "close"
+						}
+					],
+					"cookie": [],
+					"body": "{\n    \"message\": \"user update successfully!\",\n    \"user\": {\n        \"fullname\": \"tokentoken\",\n        \"id\": 1,\n        \"password\": \"321token\",\n        \"status\": \"core\",\n        \"username\": \"token\"\n    }\n}"
+				}
+			]
+		},
+		{
+			"name": "{PATCH}/users",
+			"request": {
+				"method": "PATCH",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n       \"author\":\"FANES SETIAWAN S.KOM\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://127.0.0.1:5000/books/1",
+					"protocol": "http",
+					"host": [
+						"127",
+						"0",
+						"0",
+						"1"
+					],
+					"port": "5000",
+					"path": [
+						"books",
+						"1"
+					]
+				}
+			},
+			"response": [
+				{
+					"name": "patch-users",
+					"originalRequest": {
+						"method": "PATCH",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n       \"username\":\"FANES SETIAWAN\" \n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://127.0.0.1:5000/users/1",
+							"protocol": "http",
+							"host": [
+								"127",
+								"0",
+								"0",
+								"1"
+							],
+							"port": "5000",
+							"path": [
+								"users",
+								"1"
+							]
+						}
+					},
+					"status": "OK",
+					"code": 200,
+					"_postman_previewlanguage": "json",
+					"header": [
+						{
+							"key": "Server",
+							"value": "Werkzeug/3.0.4 Python/3.12.4"
+						},
+						{
+							"key": "Date",
+							"value": "Fri, 04 Oct 2024 17:33:17 GMT"
+						},
+						{
+							"key": "Content-Type",
+							"value": "application/json"
+						},
+						{
+							"key": "Content-Length",
+							"value": "199"
+						},
+						{
+							"key": "Connection",
+							"value": "close"
+						}
+					],
+					"cookie": [],
+					"body": "{\n    \"message\": \"user partially updated successfully!\",\n    \"user\": {\n        \"fullname\": \"tokentoken\",\n        \"id\": 1,\n        \"password\": \"321token\",\n        \"status\": \"core\",\n        \"username\": \"FANES SETIAWAN\"\n    }\n}"
+				}
+			]
+		},
+		{
+			"name": "{DELETE}/users/id",
+			"request": {
+				"method": "DELETE",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://127.0.0.1:5000/books/1",
+					"protocol": "http",
+					"host": [
+						"127",
+						"0",
+						"0",
+						"1"
+					],
+					"port": "5000",
+					"path": [
+						"books",
+						"1"
+					]
+				}
+			},
+			"response": [
+				{
+					"name": "delete-user-id",
+					"originalRequest": {
+						"method": "DELETE",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://127.0.0.1:5000/users/1",
+							"protocol": "http",
+							"host": [
+								"127",
+								"0",
+								"0",
+								"1"
+							],
+							"port": "5000",
+							"path": [
+								"users",
+								"1"
+							]
+						}
+					},
+					"status": "OK",
+					"code": 200,
+					"_postman_previewlanguage": "json",
+					"header": [
+						{
+							"key": "Server",
+							"value": "Werkzeug/3.0.4 Python/3.12.4"
+						},
+						{
+							"key": "Date",
+							"value": "Fri, 04 Oct 2024 17:34:13 GMT"
+						},
+						{
+							"key": "Content-Type",
+							"value": "application/json"
+						},
+						{
+							"key": "Content-Length",
+							"value": "46"
+						},
+						{
+							"key": "Connection",
+							"value": "close"
+						}
+					],
+					"cookie": [],
+					"body": "{\n    \"message\": \"user deleted successfully!\"\n}"
+				}
+			]
+		}
+	]
+}
