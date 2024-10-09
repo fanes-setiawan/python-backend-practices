@@ -8,10 +8,10 @@ app = Flask(__name__)
 #     2:{'id':2, 'title' : 'Flask for Beginners', 'author':'John Smith' , 'year' :2021}
 # }
 
-users ={
-    1:{'user_id' :1 ,'username':'fanes123' , 'password' :'admin123' ,'fullname':'fanes setiawan','status':'mahasiswa'},
-    2:{'user_id' :2 ,'username':'admin321' , 'password' :'321admin' ,'fullname':'adminadmin','status':'admin'}
-}
+# users ={
+#     1:{'user_id' :1 ,'username':'fanes123' , 'password' :'admin123' ,'fullname':'fanes setiawan','status':'mahasiswa'},
+#     2:{'user_id' :2 ,'username':'admin321' , 'password' :'321admin' ,'fullname':'adminadmin','status':'admin'}
+# }
 
 app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql+mysqlconnector://pwl123:2wsx1qaz@localhost:3306/db_repository_0627'
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
@@ -31,6 +31,22 @@ class Book(db.Model):
             'title':self.title,
             'author':self.author,
             'year':self.year
+        }
+
+class User(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    username = db.Column(db.String(100), nullable=False, unique=True)
+    password = db.Column(db.String(100), nullable =False)
+    fullname = db.Column(db.String(100), nullable =False)
+    status = db.Column(db.String(100) , nullable =False)
+    
+    def to_dict(self):
+        return {
+            'id': self.id,
+            'username': self.username,
+            'fullname': self.fullname,
+            'password' : self.password,
+            'status': self.status
         }
 
 #init database
@@ -114,56 +130,78 @@ def delete_book(book_id):
 #get all user
 @app.route('/users',methods=['GET'])
 def get_users():
-    users
-    return jsonify(users)
+    users = User.query.all()
+    return jsonify([user.to_dict() for user in users])
 
 #get by id
 @app.route('/users/<int:user_id>',methods=['GET'])
 def get_user(user_id):
-    user = users.get(user_id)
+    user = User.query.get(user_id)
     if not user:
         return jsonify({'error' : 'user not found'}),404
-    return jsonify(user)
+    return jsonify(user.to_dict())
 
 #add new user
 @app.route('/users',methods=['POST'])
 def add_user():
-    new_user = request.get_json()
-    new_id = max(users.keys())+1
-    users[new_id] = new_user
-    return jsonify({'message' : 'user added successfully!','user':new_user}),201
+    new_user_data = request.get_json()
+    new_user = User(
+        username = new_user_data['username'],
+        password = new_user_data['password'],
+        fullname = new_user_data['fullname'],
+        status = new_user_data['status']
+    )
+    db.session.add(new_user)
+    db.session.commit()
+    return jsonify({'message' : 'user added successfully!','user':new_user.to_dict()}),201
 
 #update user
 @app.route('/users/<int:user_id>',methods=['PUT'])
 def update_user(user_id):
-    update_user = request.get_json()
-    user = users.get(user_id)
+    user = User.query.get(user_id)
     if not user:
         return jsonify({'error':'user not found'}),404
-    update_user['id'] = user_id
-    users[user_id] = update_user
-    return jsonify({'message' : 'user update successfully!','user' :update_user})
+    update_data = request.get_json()
+    user.username = update_data.get('username',user.username)
+    user.password = update_data.get('password',user.password)
+    user.fullname = update_data.get('fullname',user.fullname)
+    user.status = update_data.get('status',user.status)
+    
+    db.session.commit()
+    return jsonify({'message' : 'user update successfully!','user' :user.to_dict()})
 
 #partially update a user (patch)
 @app.route('/users/<int:user_id>', methods=['PATCH'])
 def patch_user(user_id):
-    user = users.get(user_id)
+    user = User.query.get(user_id)
     if not user:
         return jsonify({'error' : 'user not fount'}),404
 
     patch_data = request.get_json()
-    for key, value in patch_data.items():
-        if key in user:
-          user[key] = value
-    
-    return jsonify({'message':'user partially updated successfully!','user':user})
+    if 'username' in patch_data:
+        user.usename = patch_data['username']
+        
+    if 'password' in patch_data:
+        user.password = patch_data['password']
+        
+    if 'fullname' in patch_data:
+        user.fullname = patch_data['fullname']
+        
+    if 'status' in patch_data:
+        user.status = patch_data['status']
+        
+    db.session.commit()
+    return jsonify({'message':'user partially updated successfully!','user':user.to_dict()})
 
 #delete user
 @app.route('/users/<int:user_id>',methods=['DELETE'])
 def delete_user(user_id):
-    user = users.pop(user_id, None)
+    user = User.query.get(user_id)
     if not user:
         return jsonify({'error' : 'user not fount'}),404
+    
+    db.session.delete(user)
+    db.session.commit()
     return jsonify({'message':'user deleted successfully!'})
 
 @app.errorhandler(404)
