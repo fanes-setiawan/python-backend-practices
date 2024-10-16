@@ -24,13 +24,17 @@ class Book(db.Model):
     title = db.Column(db.String(100), nullable=False)
     author = db.Column(db.String(100), nullable=False)
     year = db.Column(db.Integer, nullable=False)
+    description = db.Column(db.String(255),nullable=True)
+    category_id = db.Column(db.Integer , db.ForeignKey('category.id'),nullable=False)
     
     def to_dict(self):
         return {
             'id':self.id,
             'title':self.title,
             'author':self.author,
-            'year':self.year
+            'year':self.year,
+            'description':self.description,
+            'category_id':self.category_id
         }
 
 class User(db.Model):
@@ -49,6 +53,18 @@ class User(db.Model):
             'status': self.status
         }
 
+class Category(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    name = db.Column(db.String(100), nullable=False,unique=True)
+    
+    books = db.relationship('Book',backref='category',lazy=True)
+    
+    def to_dict(self):
+        return{
+            'id':self.id,
+            'name':self.name
+        }
+
 #init database
 @app.before_request
 def create_tables():
@@ -59,15 +75,54 @@ def create_tables():
 @app.route('/books',methods=['GET'])
 def get_books():
     books = Book.query.all()
-    return jsonify([book.to_dict() for book in books])
+    books_with_categories =[]
+    for book in books:
+        #get category
+        category = Category.query.get(book.category_id)
+        #add detail book 
+        books_with_categories.append({
+            'id':book.id,
+            'title':book.title,
+            'author':book.author,
+            'description':book.description,
+            'year':book.year,
+            'category_name':category.name if category else "No Category"
+        })
+    response = {
+        'status':'success',
+        'data':{
+            'books':books_with_categories
+        },
+        'message':'Books retrieved successfully'
+    }
+    return jsonify(response),200
 
 #get by id
 @app.route('/books/<int:book_id>',methods=['GET'])
 def get_book(book_id):
     book = Book.query.get(book_id)
     if not book:
-        return jsonify({'error' : 'Book not found'}),404
-    return jsonify(book.to_dict())
+        return jsonify({'error' : 'error','message':'Book not found'}),404
+    
+    #get category
+    category = Category.query.get(book.category_id)
+    book_data = {
+         'id':book.id,
+         'title':book.title,
+         'author':book.author,
+         'description':book.description,
+         'year':book.year,
+         'category_name':category.name if category else "No Category"
+    }
+    
+    response ={
+        'status': 'success',
+        'data':{
+            'book':book_data
+        },
+        'message':'Book retrieved successfully!'
+    }
+    return jsonify(response),200
 
 #add new book
 @app.route('/books',methods=['POST'])
@@ -76,7 +131,9 @@ def add_book():
     new_book = Book(
         title = new_book_data['title'],
         author = new_book_data['author'],
-        year = new_book_data['year']
+        year = new_book_data['year'],
+        description=new_book_data.get('description',''),
+        category_id = new_book_data['category_id']
     )
     db.session.add(new_book)
     db.session.commit()
@@ -92,6 +149,8 @@ def update_book(book_id):
     book.title = updated_data.get('title',book.title)
     book.author = updated_data.get('author',book.author)
     book.year = updated_data.get('year', book.year)
+    book.description = updated_data.get('description', book.description)
+    book.category_id = updated_data.get('category_id',book.category_id)
     
     db.session.commit()
     return jsonify({'message' : 'Book update successfully!','book' :book.to_dict()})
@@ -102,6 +161,7 @@ def patch_book(book_id):
     book = Book.query.get(book_id)
     if not book:
         return jsonify({'error' : 'Book not fount'}),404
+    
 
     patch_data = request.get_json()
     if 'title' in patch_data:
@@ -110,6 +170,15 @@ def patch_book(book_id):
        book.author = patch_data['author']
     if 'year' in patch_data:
        book.year = patch_data['year']
+    if 'description' in patch_data:
+        book.description = patch_data['description']
+    if 'category' in patch_data:
+        #category isnotnull
+        category = Category.query.get(patch_data['category_id'])
+        if category:
+            book.category_id = patch_data['category_id']
+        else:
+            return jsonify({'error': 'Category not found'}),404
     
     db.session.commit()
     return jsonify({'message':'Book partially updated successfully!','book':book.to_dict()})
@@ -203,6 +272,54 @@ def delete_user(user_id):
     db.session.delete(user)
     db.session.commit()
     return jsonify({'message':'user deleted successfully!'})
+
+
+#CATEGORY ROUTE
+
+#get all category
+@app.route('/category',methods=['GET'])
+def get_categories():
+    categories = Category.query.all()
+    return jsonify([category.to_dict() for category in categories])
+
+#get category by id
+@app.route('/category/<int:id>', methods=['GET'])
+def get_category(id):
+    category = Category.query.get(id)
+    if not category:
+        return jsonify({'error':'Category not found'}),404
+    return jsonify(category.to_dict())
+
+#new category
+@app.route('/category',methods=['POST'])
+def add_category():
+    new_category_data = request.get_json()
+    new_category = Category(
+        name = new_category_data['name']
+    )
+    db.session.add(new_category)
+    db.session.commit()
+    return jsonify({'message':'Category added succesfully!', 'category':new_category.to_dict()}),201
+
+#update a category (PUT)
+@app.route('/category/<int:id>',methods=['PUT'])
+def update_category(id):
+    category = Category.query.get(id)
+    if not category:
+        return jsonify({'error':'Category not found'}),404
+    updated_data = request.get_json()
+    category.name = updated_data.get('name',category.name)
+    return jsonify({'message':'Category updated succesfully!' , 'category':category.to_disct()})
+
+#delete a category (DELETE)
+@app.route('/category/<int:id>',methods=['DELETE'])
+def delete_category(id):
+    category = Category.query.get(id)
+    if not category:
+        return jsonify({'error': 'Category not found'}),404
+    db.session.delete(category)
+    db.session.commit()
+    return jsonify({'message':'Category deleted successfully!'})
 
 @app.errorhandler(404)
 def not_found(error):
