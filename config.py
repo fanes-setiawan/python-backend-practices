@@ -8,4 +8,8 @@ app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql+mysqlconnector://flaskapiPractice
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
 db = SQLAlchemy(app)
+
+@app.route('/')
+def home():
+    return "Hello"
 app.app_context().push()
