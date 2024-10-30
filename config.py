@@ -11,5 +11,5 @@ db = SQLAlchemy(app)
 
 @app.route('/')
 def home():
-    return "Hello"
+    return "hello world!!!"
 app.app_context().push()
