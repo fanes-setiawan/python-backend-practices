@@ -10,6 +10,8 @@ app.register_blueprint(user_bp)
 app.register_blueprint(level_bp)
 
 
+
+db.create_all()
 # if __name__ == '__main__':
 #     db.create_all()
 #     app.run(debug=True)
