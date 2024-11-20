@@ -4,7 +4,9 @@ from flask import Flask
 #init db connect
 app = Flask(__name__)
 
-app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql+mysqlconnector://flaskapiPractices_foreigndug:f160a689adba286f94b25abbc358ab59ac99f42b@junbl.h.filess.io:3305/flaskapiPractices_foreigndug'
+# app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql+mysqlconnector://flaskapiPractices_foreigndug:f160a689adba286f94b25abbc358ab59ac99f42b@junbl.h.filess.io:3305/flaskapiPractices_foreigndug'
+# app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
+app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql+mysqlconnector://pwl123:2wsx1qaz@localhost:3306/db_repository_0627'
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
 db = SQLAlchemy(app)

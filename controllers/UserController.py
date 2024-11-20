@@ -2,8 +2,18 @@ from flask import jsonify, request
 from models.UserModel import User
 from models.LevelModel import Level
 from config import db
+import bcrypt
 
 
+#fungsi unntuk menghash password
+def hash_password(password):
+    salt = bcrypt.gensalt()
+    hashed = bcrypt.hashpw(password.encode('utf-8'),salt)
+    return hashed
+
+#fungsi untuk membandingkan password
+def check_password_hash(hashed_password, user_password):
+    return bcrypt.checkpw(user_password.encode('utf-8'),hashed_password.encode('utf-8'))
 def get_users():
     users = User.query.all()
     users_with_level =[]
@@ -56,9 +66,10 @@ def get_user(user_id):
 
 def add_user():
     new_user_data = request.get_json()
+    hasded_password = hash_password(new_user_data['password'])
     new_user = User(
         username = new_user_data['username'],
-        password = new_user_data['password'],
+        password = hasded_password,
         fullname = new_user_data['fullname'],
         status = new_user_data['status'],
         level_id = new_user_data['level_id']
@@ -116,3 +127,5 @@ def delete_user(user_id):
     db.session.delete(user)
     db.session.commit()
     return jsonify({'message':'user deleted successfully!'})
+
+
