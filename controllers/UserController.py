@@ -3,6 +3,21 @@ from models.UserModel import User
 from models.LevelModel import Level
 from config import db
 import bcrypt
+from flask_jwt_extended import create_access_token
+from datetime import timedelta
+
+#login
+def login():
+    data = request.get_json()
+    username = data.get('username')
+    password = data.get('password')
+    user = User.query.filter_by(username=username).first()
+    if not user:
+        return jsonify({'message':'User not found'}),404
+    if not check_password_hash(user.password,password):
+        return jsonify({'message':'Invalid password'}),401
+    access_token = create_access_token(identity=user.username , expires_delta=timedelta(hours=1))
+    return jsonify({'access_token':access_token}),200
 
 
 #fungsi unntuk menghash password
