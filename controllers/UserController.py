@@ -3,7 +3,7 @@ from models.UserModel import User
 from models.LevelModel import Level
 from config import db
 import bcrypt
-from flask_jwt_extended import create_access_token
+from flask_jwt_extended import create_access_token,jwt_required
 from datetime import timedelta
 
 #login
@@ -29,6 +29,7 @@ def hash_password(password):
 #fungsi untuk membandingkan password
 def check_password_hash(hashed_password, user_password):
     return bcrypt.checkpw(user_password.encode('utf-8'),hashed_password.encode('utf-8'))
+@jwt_required()
 def get_users():
     users = User.query.all()
     users_with_level =[]
@@ -54,6 +55,7 @@ def get_users():
     }
     return jsonify(response),200
 
+@jwt_required()
 def get_user(user_id):
     user = User.query.get(user_id)
     if not user:
@@ -78,7 +80,7 @@ def get_user(user_id):
         'message':'User retrieved successfuly!'
     }
     return jsonify(response),200
-
+@jwt_required()
 def add_user():
     new_user_data = request.get_json()
     hasded_password = hash_password(new_user_data['password'])
@@ -92,7 +94,7 @@ def add_user():
     db.session.add(new_user)
     db.session.commit()
     return jsonify({'message' : 'user added successfully!','user':new_user.to_dict()}),201
-
+@jwt_required()
 def update_user(user_id):
     user = User.query.get(user_id)
     if not user:
@@ -106,7 +108,7 @@ def update_user(user_id):
     
     db.session.commit()
     return jsonify({'message' : 'user update successfully!','user' :user.to_dict()})
-
+@jwt_required()
 def patch_user(user_id):
     user = User.query.get(user_id)
     if not user:
@@ -133,7 +135,7 @@ def patch_user(user_id):
         
     db.session.commit()
     return jsonify({'message':'user partially updated successfully!','user':user.to_dict()})
-
+@jwt_required()
 def delete_user(user_id):
     user = User.query.get(user_id)
     if not user:
