@@ -19,6 +19,30 @@ def login():
     access_token = create_access_token(identity=user.username , expires_delta=timedelta(hours=1))
     return jsonify({'access_token':access_token}),200
 
+#register
+def register():
+    data = request.get_json()
+    username = data.get('username')
+    password = data.get('password')
+    fullname = data.get('fullname')
+    status = data.get('status')
+    level_id = data.get('level_id')
+    hashed_password = hash_password(password)
+    level = Level.query.get(level_id)
+    if not level:
+        return jsonify({'message':'Level not found'}),404
+    new_user = User(
+        username = username,
+        password = hashed_password,
+        fullname = fullname,
+        status = status,
+        level_id = level_id
+    )
+    db.session.add(new_user)
+    db.session.commit()
+    return jsonify({'message' : 'user added successfully!'}),201
+
+
 
 #fungsi unntuk menghash password
 def hash_password(password):
